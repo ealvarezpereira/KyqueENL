@@ -31,7 +31,7 @@ public class ContarLlaves {
 
         try {
             fich = new File("bkm.json");
-            escribir = new PrintWriter(new FileWriter(fich, true));
+            escribir = new PrintWriter(new FileWriter(fich, false));
             escribir.println(portal);
 
         } catch (FileNotFoundException ex) {
@@ -51,7 +51,7 @@ public class ContarLlaves {
         try {
 
             JsonParser parser = new JsonParser();
-            fr = new FileReader("bookm.json");
+            fr = new FileReader("bkm.json");
             JsonElement datos = parser.parse(fr);
             Gson gson = new Gson();
             JsonElement bkm = datos.getAsJsonObject().get("portals");
@@ -85,31 +85,25 @@ public class ContarLlaves {
     public static void dumpJSONElement(JsonElement elemento) {
 
         if (elemento.isJsonObject()) {
-//            JOptionPane.showMessageDialog(null, "Es objeto");
             JsonObject obj = elemento.getAsJsonObject();
             java.util.Set<java.util.Map.Entry<String, JsonElement>> entradas = obj.entrySet();
             java.util.Iterator<java.util.Map.Entry<String, JsonElement>> iter = entradas.iterator();
             while (iter.hasNext()) {
                 java.util.Map.Entry<String, JsonElement> entrada = iter.next();
-//                JOptionPane.showMessageDialog(null, "Clave: " + entrada.getKey());
-//                JOptionPane.showMessageDialog(null, "Valor:");
                 dumpJSONElement(entrada.getValue());
             }
 
         } else if (elemento.isJsonPrimitive()) {
-//            JOptionPane.showMessageDialog(null, "Es primitiva");
             JsonPrimitive valor = elemento.getAsJsonPrimitive();
             if (valor.isString()) {
                 cuenta++;
                 if (cuenta == 4) {
-//                    JOptionPane.showMessageDialog(null, "Es texto: " + valor.getAsString());
                     lportales.add(valor.getAsString());
                     cuenta2 = 1;
                     cuenta = 0;
                 }
 
                 if (cuenta2 == 1 && cuenta == 3) {
-//                    JOptionPane.showMessageDialog(null, "Es texto: " + valor.getAsString());
                     lportales.add(valor.getAsString());
                     cuenta = 0;
                 }
