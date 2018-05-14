@@ -92,9 +92,8 @@ public class Menu extends javax.swing.JFrame {
         switch (opciones.getSelectedIndex()) {
 
             case 0:
-                ContarLlaves.ingresarPortales();
-                ContarLlaves.leerJSonEscribirFichero();
-                setVisible(true);
+                SeleccionarArchivoJSon json = new SeleccionarArchivoJSon();
+                json.setVisible(true);
                 break;
 
             case 1:

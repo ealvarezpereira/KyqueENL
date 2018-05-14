@@ -23,27 +23,6 @@ public class ContarLlaves {
     private static int cuenta2 = 0;
     static ArrayList<String> lportales = new ArrayList<String>();
 
-    public static void ingresarPortales() {
-
-        BufferedReader leer;
-
-        String portal = JOptionPane.showInputDialog("Bookmarks: ");
-
-        try {
-            fich = new File("bkm.json");
-            escribir = new PrintWriter(new FileWriter(fich, false));
-            escribir.println(portal);
-
-        } catch (FileNotFoundException ex) {
-            System.out.println("Error de escritura" + ex);
-        } catch (IOException ex) {
-            System.out.println("Error de escritura" + ex);
-        } finally {
-            escribir.close();
-        }
-
-    }
-
     public static void leerJSonEscribirFichero() {
 
         FileReader fr;
@@ -51,7 +30,7 @@ public class ContarLlaves {
         try {
 
             JsonParser parser = new JsonParser();
-            fr = new FileReader("bkm.json");
+            fr = new FileReader(SeleccionarArchivoJSon.url.getText());
             JsonElement datos = parser.parse(fr);
             Gson gson = new Gson();
             JsonElement bkm = datos.getAsJsonObject().get("portals");
@@ -107,11 +86,8 @@ public class ContarLlaves {
                     lportales.add(valor.getAsString());
                     cuenta = 0;
                 }
-
             }
-
         }
-
     }
 
     public static void establecerLinks() {
