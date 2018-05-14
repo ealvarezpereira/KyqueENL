@@ -63,9 +63,9 @@ public class ContarLlaves {
                 fich = new File("portales.txt");
                 escribir = new PrintWriter(new FileWriter(fich, true));
 
-                for (int i = 0; i < lportales.size(); i++) {
-                    escribir.println(lportales.get(i) + " = ");
-                }
+                lportales.forEach((port) -> {
+                    escribir.println(port + " = ");
+                });
 
             } catch (FileNotFoundException ex) {
                 System.out.println("Error de escritura" + ex);
