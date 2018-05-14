@@ -11,25 +11,13 @@ import javax.swing.JFileChooser;
  *
  * @author quique
  */
-/**
- *
- * @param urlpath Es la url del repositorio al que queremos hacer el clonado.
- * @param urlclone Es la url del repositorio remoto del que queremos hacer el
- * clonado.
- * @param elegirpath Es un JFileChooser de la paleta gráfica que te abre una
- * ventana para poder seleccionar la ruta del repositorio.
- */
 public class SeleccionarArchivoJSon extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Prueba
-     */
     static JFileChooser elegirpath;
     Menu men = new Menu();
 
     public SeleccionarArchivoJSon() {
         initComponents();
-        //Creamos el JFileChooser para seleccionar la ruta
         elegirpath = new JFileChooser();
 
     }
@@ -113,10 +101,6 @@ public class SeleccionarArchivoJSon extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     *
-     * @param evt Captura la accion del JFileChooser
-     */
 
     private void pathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pathActionPerformed
 
@@ -124,34 +108,19 @@ public class SeleccionarArchivoJSon extends javax.swing.JFrame {
         switch (seleccion) {
 
             case JFileChooser.APPROVE_OPTION:
-
-                //En caso de que le demos a aceptar selecciona la ruta que pinchamos
                 url.setText(elegirpath.getSelectedFile().getAbsolutePath());
                 break;
             case JFileChooser.CANCEL_OPTION:
                 break;
             default:
                 System.out.println("Error.");
-
         }
-
     }//GEN-LAST:event_pathActionPerformed
 
-    /**
-     *
-     * @param evt Captura la accion del boton cancelar
-     *
-     * Action Performed para volver a la ventana anterior
-     */
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
         this.setVisible(false);
         men.setVisible(true);
     }//GEN-LAST:event_cancelarActionPerformed
-
-    /**
-     *
-     * @param evt Captura la accion del boton aceptar
-     */
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
         ContarLlaves.leerJSonEscribirFichero();
