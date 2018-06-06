@@ -9,6 +9,7 @@ import com.google.gson.*;
 import java.io.*;
 import javax.swing.JOptionPane;
 import com.google.gson.JsonParser;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -21,16 +22,18 @@ public class ContarLlaves {
     private static PrintWriter escribir;
     private static int cuenta = 0;
     private static int cuenta2 = 0;
-    static ArrayList<String> lportales = new ArrayList<String>();
+    private static boolean primero = true;
+    static ArrayList<String> nomp = new ArrayList<String>();
+    static ArrayList<String> idp = new ArrayList<String>();
 
-    public static void leerJSonEscribirFichero() {
+    public static void cargarPortales(String json) throws SQLException {
 
         FileReader fr;
 
         try {
 
             JsonParser parser = new JsonParser();
-            fr = new FileReader(SeleccionarArchivoJSon.url.getText());
+            fr = new FileReader(json);
             JsonElement datos = parser.parse(fr);
             Gson gson = new Gson();
             JsonElement bkm = datos.getAsJsonObject().get("portals");
@@ -38,20 +41,11 @@ public class ContarLlaves {
             dumpJSONElement(bkm);
             fr.close();
 
-            try {
-                fich = new File("portales.txt");
-                escribir = new PrintWriter(new FileWriter(fich, true));
-
-                lportales.forEach((port) -> {
-                    escribir.println(port + " = ");
-                });
-
-            } catch (FileNotFoundException ex) {
-                System.out.println("Error de escritura" + ex);
-            } catch (IOException ex) {
-                System.out.println("Error de escritura" + ex);
-            } finally {
-                escribir.close();
+            if (nomp.size() == idp.size()) {
+                for (int i = 0; i < nomp.size(); i++) {
+                    String addPortal = "insert into portales values ('" + idp.get(i) + "', '" + nomp.get(i) + "');";
+                    ConexionesBD.preparedStatement(addPortal);
+                }
             }
 
         } catch (FileNotFoundException ex) {
@@ -76,15 +70,35 @@ public class ContarLlaves {
             JsonPrimitive valor = elemento.getAsJsonPrimitive();
             if (valor.isString()) {
                 cuenta++;
-                if (cuenta == 4) {
-                    lportales.add(valor.getAsString());
-                    cuenta2 = 1;
-                    cuenta = 0;
-                }
 
-                if (cuenta2 == 1 && cuenta == 3) {
-                    lportales.add(valor.getAsString());
-                    cuenta = 0;
+                switch (cuenta) {
+                    case 1:
+                        if (primero == false) {
+                            idp.add(valor.getAsString());
+                        }
+                        break;
+                    case 2:
+                        if (primero == true) {
+                            idp.add(valor.getAsString());
+                        }
+                        break;
+
+                    case 3:
+                        if (cuenta2 == 1) {
+                            nomp.add(valor.getAsString());
+                            cuenta = 0;
+                            primero = false;
+                        }
+                        break;
+
+                    case 4:
+                        nomp.add(valor.getAsString());
+                        cuenta2 = 1;
+                        cuenta = 0;
+                        primero = false;
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -133,20 +147,13 @@ public class ContarLlaves {
             while ((line = reader.readLine()) != null) {
 
                 salvadas = line;
-
                 String[] portals = salvadas.split("\\s*=\\s*");
-
-                System.out.println(portals[0]);
-
                 reader2 = new BufferedReader(new FileReader(fichlinks));
 
                 while ((line2 = reader2.readLine()) != null) {
 
                     salvadas2 = line2;
-
                     String[] links = salvadas2.split("\\s*->\\s*");
-
-                    System.out.println(links[1]);
 
                     if (portals[0].equalsIgnoreCase(links[1])) {
                         m++;
